@@ -1,0 +1,39 @@
+﻿<Page x:Class="JSOS_3._0.StronaPowitalna"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:JSOS_3._0"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="StronaPowitalna">
+
+        <Grid x:Name="glownyGrid" Margin="100" Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="1" Content="Serwis JSOS 3.0" HorizontalAlignment="Stretch" Margin="15" 
+               VerticalAlignment="Stretch" FontSize="50" FontWeight="Heavy" VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center"/>
+
+
+            <Button Content="Kandydat" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="kandydatClick"
+                 Grid.Column="0" Grid.Row="2" Margin="15" FontSize="50"/>
+
+            <Button Content="Student" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="studentClick"
+                 Grid.Column="1" Grid.Row="2" Margin="15" FontSize="50"/>
+
+            <Button Content="Pracownik" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="pracownikClick"
+                 Grid.Column="2" Grid.Row="2" Margin="15" FontSize="50"/>
+
+        </Grid>
+</Page>
