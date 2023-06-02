@@ -46,28 +46,29 @@ namespace JSOS_3._0
             if (haslo_err.Content.ToString() == string.Empty & login_err.Content.ToString() == string.Empty)
             {
                 //MessageBox.Show("mozna");
-                switch (rola)
-                {
-                    //Kandydat
-                    case 1:
-                        //MessageBox.Show("kand");
-                        _mainWindow.kandydat();
-                        break;
+
+            }
+            switch (rola)
+            {
+                //Kandydat
+                case 1:
+                    //MessageBox.Show("kand");
+                    _mainWindow.kandydat();
+                    break;
 
 
-                    //Student
-                    case 2:
-                        MessageBox.Show("stud");
+                //Student
+                case 2:
+                    MessageBox.Show("stud");
 
-                        break;
+                    break;
 
 
-                    //Pracownik
-                    case 3:
-                        MessageBox.Show("prac");
+                //Pracownik
+                case 3:
+                    MessageBox.Show("prac");
 
-                        break;
-                }
+                    break;
             }
 
 
