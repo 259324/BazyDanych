@@ -20,17 +20,71 @@ namespace JSOS_3._0
     /// </summary>
     public partial class Login : Page
     {
+        private readonly IMainWindow _mainWindow;
         int rola;
-        public Login(int rola_)
+        public Login(int rola_, IMainWindow mainWindow)
         {
             InitializeComponent();
             rola = rola_;
+                _mainWindow = mainWindow;
         }
 
-        private void loguj(object sender, EventArgs e)
+        private void Zaloguj(object sender, EventArgs e)
         {
+            login_err.Content = string.Empty;
+            haslo_err.Content = string.Empty;
+
+            if (login.Text.Length < 1)
+            {
+                login_err.Content = "Niepoprawny login";
+            }
+            if (haslo.Text.Length < 1)
+            {
+                haslo_err.Content = "Niepoprawne hasło";
+            }
+
+            if (haslo_err.Content.ToString() == string.Empty & login_err.Content.ToString() == string.Empty)
+            {
+                //MessageBox.Show("mozna");
+                switch (rola)
+                {
+                    //Kandydat
+                    case 1:
+                        //MessageBox.Show("kand");
+                        _mainWindow.kandydat();
+                        break;
+
+
+                    //Student
+                    case 2:
+                        MessageBox.Show("stud");
+
+                        break;
+
+
+                    //Pracownik
+                    case 3:
+                        MessageBox.Show("prac");
+
+                        break;
+                }
+            }
+
+
+
 
         }
 
+        private void Powrot(object sender, EventArgs e)
+        {
+            if (rola == 1)
+            {
+                _mainWindow.kandydatWybor();
+            }
+            else
+            {
+                _mainWindow.home();
+            }
+        }
     }
 }

@@ -8,24 +8,41 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="KandytatWybor">
 
-    <Grid>
+    <Grid x:Name="glownyGrid" Margin="100" Grid.Row="0" Grid.Column="0">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Button Content="zaloguj" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                Padding="10,10,10,10" Click="zaloguj"/>
-        <Button Content="zarejestruj" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                Padding="10,10,10,10" Click="zarejestruj"/>
-        <Button Content="powrot" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"
-                Padding="10,10,10,10" Click="powrot"/>
+        <Label Grid.Column="1" Content="Serwis JSOS 3.0" HorizontalAlignment="Stretch" Margin="15" 
+               VerticalAlignment="Stretch" FontSize="50" FontWeight="Heavy" VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center"/>
 
+        <Button x:Name="powrot" Content="Powrot" Click="Powrot" Grid.Column="0" Grid.Row="0"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"/>
+
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Zaloguj" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Zaloguj"
+                  Grid.Column="0" FontSize="50" Margin="50,0,15,0"/>
+
+            <Button Content="Zarejestruj" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Zarejestruj"
+                  Grid.Column="1" Margin="15,0,50,0" FontSize="50"/>
+
+        </Grid>
+        
 
     </Grid>
 </Page>

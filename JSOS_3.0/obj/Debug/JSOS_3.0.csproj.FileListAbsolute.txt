@@ -48,3 +48,5 @@ E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StronaPowitalna.g.cs
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StronaPowitalna.baml
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Signin.g.cs
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Signin.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Kandydat.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Kandydat.baml

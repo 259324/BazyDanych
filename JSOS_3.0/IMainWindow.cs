@@ -8,6 +8,8 @@ namespace JSOS_3._0
         void loadView(Frame f);
         void login(int rola);
         void signin();
+        void kandydatWybor();
+        void kandydat();
 
     }
 }

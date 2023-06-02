@@ -30,7 +30,12 @@ namespace JSOS_3._0
             _mainWindow = mainWindow;
         }
 
-        public void zarejestruj(object sender, EventArgs e)
+        private void Powrot(object sender, EventArgs e)
+        {
+            _mainWindow.kandydatWybor();
+        }
+
+        public void Zarejestruj(object sender, EventArgs e)
         {
             login_err.Content= string.Empty;
             haslo_err.Content= string.Empty;
@@ -81,7 +86,12 @@ namespace JSOS_3._0
                     }
                     reader.Close();
                     reader = new MySqlCommand(sql, conn).ExecuteReader();
+                    
+
+
                     conn.Close();
+
+                    _mainWindow.login(2);
                 }
                 catch (MySqlException ex)
                 {

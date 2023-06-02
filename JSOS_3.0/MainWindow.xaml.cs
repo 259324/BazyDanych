@@ -28,9 +28,6 @@ namespace JSOS_3._0
             home();
         }
 
-
-
-
         public void loadView(Frame f)
         {
             ContentGrid.Children.Clear();
@@ -47,7 +44,7 @@ namespace JSOS_3._0
 
         public void login(int rola)
         {
-            Login login = new Login(rola);
+            Login login = new Login(rola,this);
             loadView(new Frame { Content = login });
         }
 
@@ -57,6 +54,16 @@ namespace JSOS_3._0
             loadView(new Frame { Content = signin });
         }
 
+        public void kandydatWybor()
+        {
+            KandytatWybor kandydatWybor = new KandytatWybor(this);
+            this.loadView(new Frame { Content = kandydatWybor });
+        }
+        public void kandydat()
+        {
+            Kandydat kandydat = new Kandydat(this);
+            this.loadView(new Frame { Content = kandydat });
+        }
     }
 }
 

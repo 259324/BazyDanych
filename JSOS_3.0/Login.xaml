@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Login">
 
-    <Grid x:Name="grid" Background="AntiqueWhite">
+    <Grid x:Name="grid" Margin="100" Background="AntiqueWhite">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -18,18 +18,25 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="panel" Grid.Column="1" Grid.Row="1" Background="White">
+        <Button x:Name="powrot" Content="Powrot" Click="Powrot" Grid.Column="0" Grid.Row="0"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"/>
+
+        <Grid x:Name="panel" Grid.Column="1" Grid.Row="1" Background="White" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+
+            <Label Name="login_err" Grid.Row="0" Foreground="Red"/>
+            <Label Name="haslo_err" Grid.Row="1" Foreground="Red"/>
 
             <TextBox Name="login" FontSize="10" Padding="5,5,5,5" HorizontalAlignment="Stretch" Grid.Row="0" Margin="30,0,30,0"
                  VerticalAlignment="Center">
@@ -83,10 +90,9 @@
                 </TextBox.Style>
             </TextBox>
 
-            <Label Name="message" Grid.Row="2" Content="" Foreground="Red"/>
 
-            <Button x:Name="zaloguj" Content="Zaloguj" Grid.Row="3" 
-                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Click="loguj" />
+            <Button x:Name="zaloguj" Content="Zaloguj" Click="Zaloguj" Grid.Row="2" Grid.RowSpan="2" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Padding="10"  />
 
         </Grid>
 

@@ -31,9 +31,7 @@ namespace JSOS_3._0
 
         public void kandydatClick(object sender, EventArgs e)
         {
-            KandytatWybor kandydat = new KandytatWybor(_mainWindow);
-            _mainWindow.loadView(new Frame { Content = kandydat });
-
+            _mainWindow.kandydatWybor();
         }
         public void studentClick(object sender, EventArgs e)
         {

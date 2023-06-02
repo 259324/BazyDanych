@@ -95,12 +95,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Kandydat.xaml.cs">
+      <DependentUpon>Kandydat.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Signin.xaml.cs">
       <DependentUpon>Signin.xaml</DependentUpon>
     </Compile>
     <Compile Include="StronaPowitalna.xaml.cs">
       <DependentUpon>StronaPowitalna.xaml</DependentUpon>
     </Compile>
+    <Page Include="Kandydat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="KandytatWybor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Signin">
 
-    <Grid x:Name="grid" Background="AntiqueWhite">
+    <Grid x:Name="grid" Margin="100" Background="AntiqueWhite">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -18,9 +18,13 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-
-        <Grid x:Name="panel" Grid.Column="1" Grid.Row="1" Background="White">
+        
+        <Button x:Name="powrot" Content="Powrot" Click="Powrot" Grid.Column="0" Grid.Row="0"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20"/>
+        
+        <Grid x:Name="panel" Grid.Column="1" Grid.Row="1" Background="White" Grid.RowSpan="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
@@ -31,6 +35,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
             
             <Label Name="login_err" Grid.Row="0" Foreground="Red"/>
             <Label Name="haslo_err" Grid.Row="1" Foreground="Red"/>
@@ -116,8 +121,8 @@
 
 
 
-            <Button x:Name="Zarejestruj" Content="Zarejestruj" Grid.Row="4" 
-                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Click="zarejestruj" />
+            <Button x:Name="zarejestruj" Content="Zarejestruj" Click="Zarejestruj" Grid.Row="4" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Padding="10"  />
 
         </Grid>
 

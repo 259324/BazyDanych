@@ -16,29 +16,30 @@ using System.Windows.Shapes;
 namespace JSOS_3._0
 {
     /// <summary>
-    /// Interaction logic for KandytatWybor.xaml
+    /// Interaction logic for Kandydat.xaml
     /// </summary>
-    public partial class KandytatWybor : Page
+    public partial class Kandydat : Page
     {
         private readonly IMainWindow _mainWindow;
-        public KandytatWybor(IMainWindow mainWindow)
+        public string[] listaDanych = { "Imię", "Nazwisko" };
+
+
+        public Kandydat(IMainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
-        }
 
-        public void Zaloguj(object sender, EventArgs e)
-        {
-            _mainWindow.login(1);
-        }
-        public void Zarejestruj(object sender, EventArgs e)
-        {
-            _mainWindow.signin();
-        }
+            for (int i = 0; i < listaDanych.Length; i++) { 
+                TextBox komorka = new TextBox();
+                komorka.Text = listaDanych[i];
+                komorka.Width = 500;
+                komorka.HorizontalAlignment = HorizontalAlignment.Left;
 
-        public void Powrot(object sender, EventArgs e)
-        {
-            _mainWindow.home();
+                Frame f = new Frame { Content = komorka };
+                panelDanych.Children.Add(f);
+
+            }
+
         }
     }
 }
