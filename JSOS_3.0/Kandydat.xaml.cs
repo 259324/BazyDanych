@@ -21,7 +21,7 @@ namespace JSOS_3._0
     public partial class Kandydat : Page
     {
         private readonly IMainWindow _mainWindow;
-        public string[] listaDanych = { "Imię", "Nazwisko" };
+        public string[] listaDanych = { "Imię", "Nazwisko" , "Login" , "Hasło" , "Nr. telefonu" , "E-mail" , "PESEL" , "Matura %" , "Kierunek"};
 
 
         public Kandydat(IMainWindow mainWindow)
@@ -29,17 +29,48 @@ namespace JSOS_3._0
             InitializeComponent();
             _mainWindow = mainWindow;
 
-            for (int i = 0; i < listaDanych.Length; i++) { 
-                TextBox komorka = new TextBox();
-                komorka.Text = listaDanych[i];
-                komorka.Width = 500;
-                komorka.HorizontalAlignment = HorizontalAlignment.Left;
 
-                Frame f = new Frame { Content = komorka };
-                panelDanych.Children.Add(f);
+            for (int i = 0; i < listaDanych.Length; i++) {
+
+                Grid komorka = new Grid();
+
+                komorka.ColumnDefinitions.Add(new ColumnDefinition());
+                komorka.ColumnDefinitions.Add(new ColumnDefinition());
+
+                komorka.ColumnDefinitions[0].Width = new GridLength(150);
+
+
+                TextBox poleDanych = new TextBox();
+                poleDanych.Text = listaDanych[i];
+                poleDanych.Width = 500;
+                poleDanych.HorizontalAlignment = HorizontalAlignment.Left;
+                poleDanych.Margin = new Thickness(10);
+                poleDanych.FontSize = 15;
+
+
+                Label jakieDane = new Label();
+                jakieDane.Content = listaDanych[i];
+                jakieDane.FontSize = 15;
+                jakieDane.Margin = new Thickness(10);
+                jakieDane.HorizontalAlignment = HorizontalAlignment.Left;
+
+
+
+                Grid.SetColumn(jakieDane, 0);
+                komorka.Children.Add(jakieDane);
+
+                Grid.SetColumn(poleDanych, 1);
+                komorka.Children.Add(poleDanych);
+
+
+                panelDanych.Children.Add(komorka);
 
             }
 
+        }
+        public void Powrot(object sender, EventArgs e)
+        {
+            _mainWindow.kandydatWybor();
         }
     }
 }

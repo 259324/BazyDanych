@@ -8,7 +8,15 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="StronaPowitalna">
 
-        <Grid x:Name="glownyGrid" Margin="100" Grid.Row="0" Grid.Column="0">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid x:Name="glownyGrid" Margin="100" Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -20,13 +28,12 @@
                 <RowDefinition/>
                 <RowDefinition />
             </Grid.RowDefinitions>
-
-            <Label Grid.Column="1" Content="Serwis JSOS 3.0" HorizontalAlignment="Stretch" Margin="15" 
-               VerticalAlignment="Stretch" FontSize="50" FontWeight="Heavy" VerticalContentAlignment="Center"
-               HorizontalContentAlignment="Center"/>
+            
+        <Label Style="{DynamicResource Tytul}"/>
 
 
-            <Button Content="Kandydat" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="kandydatClick"
+
+        <Button Content="Kandydat" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="kandydatClick"
                  Grid.Column="0" Grid.Row="2" Margin="15" FontSize="50"/>
 
             <Button Content="Student" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="studentClick"

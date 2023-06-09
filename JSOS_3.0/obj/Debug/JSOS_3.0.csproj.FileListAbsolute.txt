@@ -50,3 +50,6 @@ E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Signin.g.cs
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Signin.baml
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Kandydat.g.cs
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Kandydat.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Student.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Student.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Style.baml

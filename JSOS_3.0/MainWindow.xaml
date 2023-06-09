@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:JSOS_3._0"
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="1600">
-    <Grid x:Name="ContentGrid">
+    <Grid x:Name="ContentGrid" Background="BurlyWood">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>

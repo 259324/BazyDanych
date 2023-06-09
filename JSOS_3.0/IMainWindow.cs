@@ -10,6 +10,7 @@ namespace JSOS_3._0
         void signin();
         void kandydatWybor();
         void kandydat();
+        void student();
 
     }
 }

@@ -104,6 +104,9 @@
     <Compile Include="StronaPowitalna.xaml.cs">
       <DependentUpon>StronaPowitalna.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Student.xaml.cs">
+      <DependentUpon>Student.xaml</DependentUpon>
+    </Compile>
     <Page Include="Kandydat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +143,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StronaPowitalna.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Student.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

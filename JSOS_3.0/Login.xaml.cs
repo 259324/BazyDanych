@@ -59,7 +59,7 @@ namespace JSOS_3._0
 
                 //Student
                 case 2:
-                    MessageBox.Show("stud");
+                    _mainWindow.student();
 
                     break;
 

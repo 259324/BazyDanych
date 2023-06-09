@@ -64,6 +64,11 @@ namespace JSOS_3._0
             Kandydat kandydat = new Kandydat(this);
             this.loadView(new Frame { Content = kandydat });
         }
+        public void student()
+        {
+            Student kandydat = new Student(this);
+            this.loadView(new Frame { Content = kandydat });
+        }
     }
 }
 
