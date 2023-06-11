@@ -98,6 +98,12 @@
     <Compile Include="Kandydat.xaml.cs">
       <DependentUpon>Kandydat.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pracownik.xaml.cs">
+      <DependentUpon>Pracownik.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PracownikOceny.xaml.cs">
+      <DependentUpon>PracownikOceny.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Signin.xaml.cs">
       <DependentUpon>Signin.xaml</DependentUpon>
     </Compile>
@@ -106,6 +112,15 @@
     </Compile>
     <Compile Include="Student.xaml.cs">
       <DependentUpon>Student.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StudentDane.xaml.cs">
+      <DependentUpon>StudentDane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StudentOceny.xaml.cs">
+      <DependentUpon>StudentOceny.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StudentZajecia.xaml.cs">
+      <DependentUpon>StudentZajecia.xaml</DependentUpon>
     </Compile>
     <Page Include="Kandydat.xaml">
       <SubType>Designer</SubType>
@@ -138,6 +153,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pracownik.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PracownikOceny.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Signin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,6 +170,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Student.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StudentDane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StudentOceny.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StudentZajecia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

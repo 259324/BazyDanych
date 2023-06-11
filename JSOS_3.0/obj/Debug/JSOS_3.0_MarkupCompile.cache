@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 E:\Studia\6sem\BazyDanych\JSOS_3.0\App.xaml
-8-2064207009
+131986021973
 
-12-659276828
+171864301802
 29-1812507188
-Kandydat.xaml;KandytatWybor.xaml;Login.xaml;MainWindow.xaml;Signin.xaml;StronaPowitalna.xaml;Student.xaml;Style.xaml;
+Kandydat.xaml;KandytatWybor.xaml;Login.xaml;MainWindow.xaml;Pracownik.xaml;PracownikOceny.xaml;Signin.xaml;StronaPowitalna.xaml;Student.xaml;StudentDane.xaml;StudentOceny.xaml;StudentZajecia.xaml;Style.xaml;
 
-True
+False
 

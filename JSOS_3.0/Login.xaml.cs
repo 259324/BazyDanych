@@ -52,22 +52,17 @@ namespace JSOS_3._0
             {
                 //Kandydat
                 case 1:
-                    //MessageBox.Show("kand");
                     _mainWindow.kandydat();
                     break;
-
 
                 //Student
                 case 2:
                     _mainWindow.student();
-
                     break;
-
 
                 //Pracownik
                 case 3:
-                    MessageBox.Show("prac");
-
+                    _mainWindow.pracownik();
                     break;
             }
 

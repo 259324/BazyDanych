@@ -18,11 +18,11 @@ namespace JSOS_3._0
     /// <summary>
     /// Interaction logic for Student.xaml
     /// </summary>
-    public partial class Student : Page
+    public partial class Pracownik : Page
     {
         private readonly IMainWindow _mainWindow;
 
-        public Student(IMainWindow mainWindow)
+        public Pracownik(IMainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
@@ -32,13 +32,16 @@ namespace JSOS_3._0
             _mainWindow.home();
         }
 
-        private void Dane(object sender, EventArgs e) {
-            _mainWindow.studentDane();
-        }
-        private void Oceny(object sender, EventArgs e) {
+        private void Oceny(object sender, EventArgs e)
+        {
             _mainWindow.studentOceny();
         }
-        private void Zajecia(object sender, EventArgs e) {
+        private void Zajecia(object sender, EventArgs e)
+        {
+            _mainWindow.studentZajecia();
+        }
+        private void Dziekan(object sender, EventArgs e)
+        {
             _mainWindow.studentZajecia();
         }
 

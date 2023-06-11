@@ -11,6 +11,10 @@ namespace JSOS_3._0
         void kandydatWybor();
         void kandydat();
         void student();
+        void studentDane();
+        void studentOceny();
+        void studentZajecia();
+        void pracownik();
 
     }
 }

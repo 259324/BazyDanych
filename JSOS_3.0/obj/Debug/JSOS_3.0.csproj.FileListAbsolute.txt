@@ -53,3 +53,13 @@ E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Kandydat.baml
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Student.g.cs
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Student.baml
 E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Style.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StudentDane.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StudentDane.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StudentOceny.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StudentOceny.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StudentZajecia.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\StudentZajecia.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Pracownik.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\Pracownik.baml
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\PracownikOceny.g.cs
+E:\Studia\6sem\BazyDanych\JSOS_3.0\obj\Debug\PracownikOceny.baml

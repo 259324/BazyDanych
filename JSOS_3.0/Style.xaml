@@ -24,7 +24,6 @@
         <Setter Property="FontWeight" Value="Heavy"/>
         <Setter Property="Grid.Row" Value="0"/>
         <Setter Property="Grid.Column" Value="0"/>
-
     </Style>
 
     <Style x:Key="Student" TargetType="Button">
@@ -34,6 +33,38 @@
         <Setter Property="Padding" Value="10"/>
         <Setter Property="FontSize" Value="20"/>
     </Style>
+
+    
+    <Style x:Key="Ocena" TargetType="Label">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    
+    <Style x:Key="OcenaL" TargetType="Label">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+
+
+    <Style x:Key="Komorka" TargetType="Grid">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Height" Value="auto"/>
+    </Style>
+    
+    <Style x:Key="KomorkaL" TargetType="Grid">
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Height" Value="auto"/>
+    </Style>
+
+
 
 
 </ResourceDictionary>

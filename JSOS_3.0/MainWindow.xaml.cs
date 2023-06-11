@@ -66,8 +66,30 @@ namespace JSOS_3._0
         }
         public void student()
         {
-            Student kandydat = new Student(this);
-            this.loadView(new Frame { Content = kandydat });
+            Student student = new Student(this);
+            this.loadView(new Frame { Content = student });
+        }
+
+        public void studentDane()
+        {
+            StudentDane studentDane = new StudentDane(this);
+            this.loadView(new Frame { Content = studentDane});
+        }
+        public void studentOceny()
+        {
+            StudentOceny studentOceny = new StudentOceny(this);
+            this.loadView(new Frame { Content = studentOceny });
+        }
+
+        public void studentZajecia()
+        {
+            StudentZajecia studentZajecia = new StudentZajecia(this);
+            this.loadView(new Frame { Content = studentZajecia });
+        }
+        public void pracownik()
+        {
+            Pracownik pracownik = new Pracownik(this);
+            this.loadView(new Frame { Content = pracownik });
         }
     }
 }
