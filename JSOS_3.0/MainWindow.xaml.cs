@@ -22,10 +22,21 @@ namespace JSOS_3._0
     /// </summary>
     public partial class MainWindow : Window, IMainWindow
     {
+        private int ID = 0;
         public MainWindow()
         {
             InitializeComponent();
             home();
+        }
+
+        public void setID(int ID_)
+        {
+            ID = ID_;
+        }
+
+        public int getID()
+        {
+            return ID;
         }
 
         public void loadView(Frame f)
@@ -42,9 +53,9 @@ namespace JSOS_3._0
             loadView(new Frame { Content = sp});
         }
 
-        public void login(int rola)
+        public void login(int rola_)
         {
-            Login login = new Login(rola,this);
+            Login login = new Login(rola_,this);
             loadView(new Frame { Content = login });
         }
 
@@ -96,6 +107,19 @@ namespace JSOS_3._0
             PracownikOceny pracownikOceny = new PracownikOceny(this);
             this.loadView(new Frame { Content = pracownikOceny });
         }
+
+        public void pracownikZajecia()
+        {
+            PracownikZajecia c = new PracownikZajecia(this);
+            this.loadView(new Frame { Content = c });
+        }
+
+        public void dziekan()
+        {
+            Dziekan c = new Dziekan(this);
+            this.loadView(new Frame { Content = c });
+        }
+
     }
 }
 

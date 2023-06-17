@@ -138,11 +138,15 @@ CREATE TABLE `ocena` (
   `data_wyst` date NOT NULL,
   `Oc_przedmiotID` int NOT NULL,
   `Oc_studentID` int NOT NULL,
+  `Oc_wystawilID` int NOT NULL,
+  `opis` varchar(100) NOT NULL,
   PRIMARY KEY (`idOcena`),
-  KEY `Oc_przedmiotID_idx` (`Oc_przedmiotID`),
+  KEY `Oc_przedmiotID_idx` (`Oc_przedmiotID`) /*!80000 INVISIBLE */,
   KEY `Oc_studentID_idx` (`Oc_studentID`),
+  KEY `Oc_wystawilID_idx` (`Oc_wystawilID`),
   CONSTRAINT `Oc_przedmiotID` FOREIGN KEY (`Oc_przedmiotID`) REFERENCES `przedmiot` (`idPrzedmiot`),
-  CONSTRAINT `Oc_studentID` FOREIGN KEY (`Oc_studentID`) REFERENCES `student` (`idStudent`)
+  CONSTRAINT `Oc_studentID` FOREIGN KEY (`Oc_studentID`) REFERENCES `student` (`idStudent`),
+  CONSTRAINT `Oc_wystawilID` FOREIGN KEY (`Oc_wystawilID`) REFERENCES `pracownik` (`idPracownik`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -152,7 +156,7 @@ CREATE TABLE `ocena` (
 
 LOCK TABLES `ocena` WRITE;
 /*!40000 ALTER TABLE `ocena` DISABLE KEYS */;
-INSERT INTO `ocena` VALUES (1,2,'2022-02-02',1,1),(2,2.5,'2022-02-02',2,2),(3,3,'2022-02-02',3,3),(4,3.5,'2022-02-02',4,4),(5,4,'2022-02-02',1,5),(6,4.5,'2022-02-02',2,6),(7,5,'2022-02-02',3,7),(8,5.5,'2022-02-02',4,1),(9,2,'2022-02-02',1,2),(10,2.5,'2022-02-02',2,3),(11,3,'2022-02-02',3,4),(12,3.5,'2022-02-02',4,5),(13,4,'2022-02-02',1,6),(14,4.5,'2022-02-02',2,7),(15,5,'2022-02-02',3,1);
+INSERT INTO `ocena` VALUES (1,2,'2022-02-02',1,1,1,'j'),(2,2.5,'2022-02-02',2,2,1,'j'),(3,3,'2022-02-02',3,3,1,'j'),(4,3.5,'2022-02-02',4,4,1,'j'),(5,4,'2022-02-02',1,5,1,'j'),(6,4.5,'2022-02-02',2,6,1,'j'),(7,5,'2022-02-02',3,7,1,'j'),(8,5.5,'2022-02-02',4,1,1,'j'),(9,2,'2022-02-02',1,2,1,'j'),(10,2.5,'2022-02-02',2,3,1,'j'),(11,3,'2022-02-02',3,4,1,'j'),(12,3.5,'2022-02-02',4,5,1,'j'),(13,4,'2022-02-02',1,6,1,'j'),(14,4.5,'2022-02-02',2,7,1,'j'),(15,5,'2022-02-02',3,1,1,'jj');
 /*!40000 ALTER TABLE `ocena` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,6 +201,7 @@ CREATE TABLE `przedmiot` (
   `idPrzedmiot` int NOT NULL,
   `Przed_pracownikID` int NOT NULL,
   `Przed_kierunekID` int NOT NULL,
+  `nazwa` varchar(45) NOT NULL,
   PRIMARY KEY (`idPrzedmiot`),
   KEY `Przed_pracownikID_idx` (`Przed_pracownikID`),
   KEY `Przed_kierunekID_idx` (`Przed_kierunekID`),
@@ -211,7 +216,7 @@ CREATE TABLE `przedmiot` (
 
 LOCK TABLES `przedmiot` WRITE;
 /*!40000 ALTER TABLE `przedmiot` DISABLE KEYS */;
-INSERT INTO `przedmiot` VALUES (1,1,1),(2,2,1),(3,3,2),(4,4,2);
+INSERT INTO `przedmiot` VALUES (1,1,1,''),(2,2,1,''),(3,3,2,''),(4,4,2,'');
 /*!40000 ALTER TABLE `przedmiot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -308,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-11 22:17:06
+-- Dump completed on 2023-06-17 13:31:17

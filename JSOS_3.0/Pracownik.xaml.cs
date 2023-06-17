@@ -38,11 +38,12 @@ namespace JSOS_3._0
         }
         private void Zajecia(object sender, EventArgs e)
         {
-            _mainWindow.studentZajecia();
+            _mainWindow.pracownikZajecia();
         }
         private void Dziekan(object sender, EventArgs e)
         {
-            _mainWindow.studentZajecia();
+            //if(jestes dziekanem)
+            _mainWindow.dziekan();
         }
 
     }

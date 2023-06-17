@@ -98,14 +98,23 @@
     <Compile Include="DodajOcene.xaml.cs">
       <DependentUpon>DodajOcene.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dziekan.xaml.cs">
+      <DependentUpon>Dziekan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Kandydat.xaml.cs">
       <DependentUpon>Kandydat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NowyKierunek.xaml.cs">
+      <DependentUpon>NowyKierunek.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pracownik.xaml.cs">
       <DependentUpon>Pracownik.xaml</DependentUpon>
     </Compile>
     <Compile Include="PracownikOceny.xaml.cs">
       <DependentUpon>PracownikOceny.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PracownikZajecia.xaml.cs">
+      <DependentUpon>PracownikZajecia.xaml</DependentUpon>
     </Compile>
     <Compile Include="Signin.xaml.cs">
       <DependentUpon>Signin.xaml</DependentUpon>
@@ -126,6 +135,10 @@
       <DependentUpon>StudentZajecia.xaml</DependentUpon>
     </Compile>
     <Page Include="DodajOcene.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dziekan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -160,11 +173,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NowyKierunek.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pracownik.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PracownikOceny.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PracownikZajecia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,6 +16,10 @@ namespace JSOS_3._0
         void studentZajecia();
         void pracownik();
         void pracownikOceny();
+        void pracownikZajecia();
 
+        void dziekan();
+        void setID(int ID);
+        int getID();
     }
 }

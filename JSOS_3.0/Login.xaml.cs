@@ -31,40 +31,44 @@ namespace JSOS_3._0
 
         private void Zaloguj(object sender, EventArgs e)
         {
+            bool err=false;
             login_err.Content = string.Empty;
             haslo_err.Content = string.Empty;
-
             if (login.Text.Length < 1)
             {
                 login_err.Content = "Niepoprawny login";
+                err = true;
             }
             if (haslo.Text.Length < 1)
             {
                 haslo_err.Content = "Niepoprawne hasło";
+                err = true;
+
             }
 
-            if (haslo_err.Content.ToString() == string.Empty & login_err.Content.ToString() == string.Empty)
+            if (!err)
             {
-                //MessageBox.Show("mozna");
+                // TODO login
+                //_mainWindow.setID(login)
+                switch (rola)
+                {
+                    //Kandydat
+                    case 1:
+                        _mainWindow.kandydat();
+                        break;
 
+                    //Student
+                    case 2:
+                        _mainWindow.student();
+                        break;
+
+                    //Pracownik
+                    case 3:
+                        _mainWindow.pracownik();
+                        break;
+                }
             }
-            switch (rola)
-            {
-                //Kandydat
-                case 1:
-                    _mainWindow.kandydat();
-                    break;
 
-                //Student
-                case 2:
-                    _mainWindow.student();
-                    break;
-
-                //Pracownik
-                case 3:
-                    _mainWindow.pracownik();
-                    break;
-            }
 
 
 
