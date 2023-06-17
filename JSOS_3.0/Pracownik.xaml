@@ -33,10 +33,22 @@
 
         <Label Style="{DynamicResource Tytul}"/>
 
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-        <Button x:Name="oceny" Content="Wystaw ocenę" Click="Oceny" Grid.Column="1" Style="{DynamicResource Student}"/>
+            <Button x:Name="zajęcia" Content="Zajęcia" Click="Zajecia" Grid.Column="0" Style="{DynamicResource Student}"/>
 
-        <Button x:Name="zajęcia" Content="Zajęcia" Click="Zajecia" Grid.Column="2" Style="{DynamicResource Student}"/>
+
+            <Button x:Name="oceny" Content="Wystaw ocenę" Click="Oceny" Grid.Column="1" Style="{DynamicResource Student}"/>
+
+
+        </Grid>
+
+
 
         <Button x:Name="dziekan" Content="Dziekan" Click="Dziekan" Grid.Column="1" Grid.Row="3" Padding="0,0,0,0"
                 FontSize="15"/>

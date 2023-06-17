@@ -15,6 +15,7 @@ namespace JSOS_3._0
         void studentOceny();
         void studentZajecia();
         void pracownik();
+        void pracownikOceny();
 
     }
 }

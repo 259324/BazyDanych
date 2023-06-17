@@ -95,6 +95,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DodajOcene.xaml.cs">
+      <DependentUpon>DodajOcene.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Kandydat.xaml.cs">
       <DependentUpon>Kandydat.xaml</DependentUpon>
     </Compile>
@@ -122,6 +125,10 @@
     <Compile Include="StudentZajecia.xaml.cs">
       <DependentUpon>StudentZajecia.xaml</DependentUpon>
     </Compile>
+    <Page Include="DodajOcene.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Kandydat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -21,7 +21,7 @@ namespace JSOS_3._0
     public partial class PracownikOceny: Page
     {
         private readonly IMainWindow _mainWindow;
-        public Ocena[] listaOcen = { new Ocena(3.5, DateTime.Now, "druty", "swintuch") };
+        public Ocena[] listaOcen = { new Ocena(3.5, DateTime.Now, "druty", "swintuch", "praca na lekcji") };
 
 
         // Załaduj plik XAML ze stylami
@@ -38,6 +38,7 @@ namespace JSOS_3._0
 
             Grid legenda = new Grid();
 
+            legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
@@ -70,6 +71,11 @@ namespace JSOS_3._0
             Grid.SetColumn(wystawilL, 3);
             legenda.Children.Add(wystawilL);
 
+            Label opisL = new Label();
+            opisL.Style = resourceDict["OcenaL"] as Style;
+            opisL.Content = "Wystawil";
+            Grid.SetColumn(opisL, 4);
+            legenda.Children.Add(opisL);
 
             panelOcen.Children.Add(legenda);
 
@@ -79,6 +85,7 @@ namespace JSOS_3._0
 
                 Grid komorka = new Grid();
 
+                komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
@@ -109,6 +116,11 @@ namespace JSOS_3._0
                 Grid.SetColumn(wystawil, 3);
                 komorka.Children.Add(wystawil);
 
+                Label opis = new Label();
+                opis.Style = resourceDict["Ocena"] as Style;
+                opis.Content = listaOcen[i].opis;
+                Grid.SetColumn(opis, 4);
+                komorka.Children.Add(opis);
 
                 panelOcen.Children.Add(komorka);
 
@@ -117,7 +129,14 @@ namespace JSOS_3._0
         }
         public void Powrot(object sender, EventArgs e)
         {
-            _mainWindow.student();
+            _mainWindow.pracownik();
+        }
+        public void Dodaj(object sender, EventArgs e)
+        {
+            DodajOcene dodajOcene = new DodajOcene();
+            dodajOcene.ShowDialog();
+            _mainWindow.pracownikOceny();
+
         }
     }
 

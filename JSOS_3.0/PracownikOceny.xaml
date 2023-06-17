@@ -33,8 +33,11 @@
         <Button x:Name="powrot" Style="{DynamicResource ButtonStyle}" Click="Powrot"/>
 
 
-        <Label Grid.Column="0" Grid.Row="1" Content="Twoje oceny:" VerticalAlignment="Top" HorizontalAlignment="Center"
+        <Label Grid.Column="0" Grid.Row="1" Content="Wystawione oceny:" VerticalAlignment="Top" HorizontalAlignment="Center"
                FontSize="40"/>
+
+        <Button Grid.Column="0" Grid.Row="2" Content="Dodaj ocenę" VerticalAlignment="Center" HorizontalAlignment="Center"
+               FontSize="20" Click="Dodaj"/>
 
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="0,20,0,0" >

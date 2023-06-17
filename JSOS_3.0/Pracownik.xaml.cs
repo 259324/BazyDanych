@@ -34,7 +34,7 @@ namespace JSOS_3._0
 
         private void Oceny(object sender, EventArgs e)
         {
-            _mainWindow.studentOceny();
+            _mainWindow.pracownikOceny();
         }
         private void Zajecia(object sender, EventArgs e)
         {

@@ -21,7 +21,7 @@ namespace JSOS_3._0
     public partial class StudentOceny: Page
     {
         private readonly IMainWindow _mainWindow;
-        public Ocena[] listaOcen = { new Ocena(3.5,DateTime.Now,"druty","swintuch") };
+        public Ocena[] listaOcen = { new Ocena(3.5,DateTime.Now,"druty","swintuch","praca na lekcji") };
 
 
         // Załaduj plik XAML ze stylami
@@ -127,13 +127,15 @@ namespace JSOS_3._0
         public DateTime data;
         public string przedmiot;
         public string wystawil;
+        public string opis;
 
-        public Ocena(double stopien_,DateTime data_,string przedmiot_,string wystawil_)
+        public Ocena(double stopien_,DateTime data_,string przedmiot_,string wystawil_, string opis_)
         {
             stopien = stopien_;
             data = data_;
             przedmiot = przedmiot_; 
             wystawil = wystawil_;
+            opis = opis_;
         }
     }
 }

@@ -91,6 +91,11 @@ namespace JSOS_3._0
             Pracownik pracownik = new Pracownik(this);
             this.loadView(new Frame { Content = pracownik });
         }
+        public void pracownikOceny()
+        {
+            PracownikOceny pracownikOceny = new PracownikOceny(this);
+            this.loadView(new Frame { Content = pracownikOceny });
+        }
     }
 }
 
