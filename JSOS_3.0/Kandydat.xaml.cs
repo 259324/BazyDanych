@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,13 +23,40 @@ namespace JSOS_3._0
     public partial class Kandydat : Page
     {
         private readonly IMainWindow _mainWindow;
-        public string[] listaDanych = { "Imię", "Nazwisko" , "Login" , "Hasło" , "Nr. telefonu" , "E-mail" , "PESEL" , "Matura %" , "Kierunek"};
+        public string[] listaDanych = {"Imię", "Nazwisko" , "Login" , "Hasło" , "Nr. telefonu" , "E-mail" , "PESEL" , "Matura %" , "Kierunek"};
+        public string[] funkcjeBD = {"getImie","getNazwisko" ,"getLogin" ,"getPass" ,"getTel" ,"getMail" ,"getPESEL" ,"getMatura" ,"getKier","getStatus"};
+        public string[] pobraneDane = {"getImie","getNazwisko" ,"getLogin" ,"getPass" ,"getTel" ,"getMail" ,"getPESEL" ,"getMatura" ,"getKier","getStatus"};
 
 
         public Kandydat(IMainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+
+
+            for (int i = 0; i < funkcjeBD.Length; i++)
+            {
+                string sql = "select uczelnia." + funkcjeBD[i] + "(" + _mainWindow.getID() + ") AS result;";
+                MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+
+                String res = "";
+                while (reader.Read())
+                {
+                        res = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+
+                pobraneDane[i] = res;
+            }
+
+            if(pobraneDane[pobraneDane.Length - 1] == "True")
+            {
+                status.Content = "Przyjęto";
+            }
+            else
+            {
+                status.Content = "Odrzucono";
+            }
 
 
             for (int i = 0; i < listaDanych.Length; i++) {
@@ -40,8 +69,10 @@ namespace JSOS_3._0
                 komorka.ColumnDefinitions[0].Width = new GridLength(150);
 
 
+                // TODO wyswietlenie nie id
+
                 TextBox poleDanych = new TextBox();
-                poleDanych.Text = listaDanych[i];
+                poleDanych.Text = pobraneDane[i];
                 poleDanych.Width = 500;
                 poleDanych.HorizontalAlignment = HorizontalAlignment.Left;
                 poleDanych.Margin = new Thickness(10);

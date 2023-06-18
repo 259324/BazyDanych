@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,10 +24,41 @@ namespace JSOS_3._0
     public partial class MainWindow : Window, IMainWindow
     {
         private int ID = 0;
+        private MySqlConnection conn;
         public MainWindow()
         {
             InitializeComponent();
             home();
+
+            Closing += MainWindow_Closing;
+
+
+            try
+            {
+                string connstring = "server=localhost;uid=Rejestracja_bot;pwd=haslo1234;database=uczelnia";
+                conn = new MySqlConnection(connstring);
+                conn.Open();
+                if (!conn.Ping())
+                {
+                    MessageBox.Show("blad polaczenia");
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("catch: "+ex.Message);
+            }
+
+        }
+
+        public MySqlConnection getConn()
+        {
+            return conn;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            conn.Close();
         }
 
         public void setID(int ID_)

@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `uczelnia` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `uczelnia`;
 -- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: uczelnia
@@ -56,8 +58,11 @@ CREATE TABLE `kandydat` (
   `przyjety` tinyint NOT NULL DEFAULT '0',
   `matura` int NOT NULL,
   `Kand_userID` int NOT NULL,
+  `Kand_kierID` int NOT NULL,
   PRIMARY KEY (`idKandydat`),
   KEY `Kand_userID_idx` (`Kand_userID`),
+  KEY `Kand_kierID_idx` (`Kand_kierID`),
+  CONSTRAINT `Kand_kierID` FOREIGN KEY (`Kand_kierID`) REFERENCES `kierunek` (`idKierunek`),
   CONSTRAINT `Kand_userID` FOREIGN KEY (`Kand_userID`) REFERENCES `users` (`idUsers`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -68,7 +73,7 @@ CREATE TABLE `kandydat` (
 
 LOCK TABLES `kandydat` WRITE;
 /*!40000 ALTER TABLE `kandydat` DISABLE KEYS */;
-INSERT INTO `kandydat` VALUES (1,0,85,2),(2,1,75,3);
+INSERT INTO `kandydat` VALUES (1,0,85,2,1),(2,1,75,3,2);
 /*!40000 ALTER TABLE `kandydat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +219,7 @@ CREATE TABLE `przedmiot` (
 
 LOCK TABLES `przedmiot` WRITE;
 /*!40000 ALTER TABLE `przedmiot` DISABLE KEYS */;
-INSERT INTO `przedmiot` VALUES (1,1,1,''),(2,2,1,''),(3,3,2,''),(4,4,2,'');
+INSERT INTO `przedmiot` VALUES (1,1,1,'SCR'),(2,2,1,'PO'),(3,3,2,'AM'),(4,4,2,'BD');
 /*!40000 ALTER TABLE `przedmiot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,8 +290,8 @@ CREATE TABLE `users` (
   `Nazwisko` varchar(45) NOT NULL,
   `Login` varchar(45) NOT NULL,
   `password` varchar(32) NOT NULL,
-  `nr. tel` int DEFAULT NULL,
-  `e-mail` varchar(80) DEFAULT NULL,
+  `tel` int DEFAULT NULL,
+  `Email` varchar(80) DEFAULT NULL,
   `PESEL` float NOT NULL,
   PRIMARY KEY (`idUsers`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='każdy użytkownik musi mieć swój rekord w tej tabeli';
@@ -305,7 +310,7 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'uczelnia'
 --
-/*!50003 DROP FUNCTION IF EXISTS `is_login_used` */;
+/*!50003 DROP FUNCTION IF EXISTS `getImie` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -315,16 +320,355 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `is_login_used`(new_login varchar(30)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `getImie`(id INT) RETURNS varchar(255) CHARSET utf8mb4
 BEGIN
-declare result int;
-set result = 0;
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT Imie INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getKier` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getKier`(id INT) RETURNS int
+BEGIN
+  DECLARE result int;
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT Kand_kierID INTO result FROM kandydat WHERE Kand_userID = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  END IF;
 
-if exists (select * from users where Login = new_login) then
-	set result = 1;
-end if;
+SELECT Stud_kierunekID INTO result FROM student WHERE Stud_userID = id LIMIT 1;
 
-RETURN result;
+  IF result IS NOT NULL THEN
+    RETURN result;
+  else	
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getLogin` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getLogin`(id INT) RETURNS varchar(255) CHARSET utf8mb4
+BEGIN
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT Login INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getMail` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getMail`(id INT) RETURNS varchar(255) CHARSET utf8mb4
+BEGIN
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT Email INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getMatura` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getMatura`(id INT) RETURNS int
+BEGIN
+  DECLARE result int;
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT matura INTO result FROM kandydat WHERE Kand_userID = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getNazwisko` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getNazwisko`(id INT) RETURNS varchar(255) CHARSET utf8mb4
+BEGIN
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT Nazwisko INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getPass` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getPass`(id INT) RETURNS varchar(255) CHARSET utf8mb4
+BEGIN
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT password INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getPESEL` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getPESEL`(id INT) RETURNS float
+BEGIN
+  DECLARE result float;
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT PESEL INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getPrzedNazwa` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getPrzedNazwa`(idParam INT) RETURNS varchar(255) CHARSET utf8mb4
+BEGIN
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT nazwa INTO result FROM przedmiot WHERE idPrzedmiot = idParam LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN 0; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getStatus` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getStatus`(id INT) RETURNS tinyint(1)
+BEGIN
+  DECLARE result bool;
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT przyjety INTO result FROM kandydat WHERE idKandydat = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `getTel` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getTel`(id INT) RETURNS int
+BEGIN
+  DECLARE result VARCHAR(255);
+  
+  -- Przeszukaj tabelę w poszukiwaniu podanego ID i pobierz dane z wybranej kolumny
+  -- LIMIT 1 - ograniczenie do zwrocenia jednego wier
+  SELECT tel INTO result FROM users WHERE idUsers = id LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć dane z wybranej kolumny
+  IF result IS NOT NULL THEN
+    RETURN result;
+  ELSE
+    RETURN NULL; -- Jeśli nie znaleziono pasującego rekordu, zwróć NULL
+  END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `login` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `login`(login_ VARCHAR(255), password_ VARCHAR(255)) RETURNS int
+BEGIN
+  DECLARE user_id INT;
+  
+  -- Przeszukaj tabelę w poszukiwaniu pasującego loginu i hasła
+  SELECT idUsers INTO user_id FROM users WHERE Login = login_ AND password = password_ LIMIT 1;
+  
+  -- Jeśli pasujący rekord istnieje, zwróć user_id
+  IF user_id IS NOT NULL THEN
+    RETURN user_id;
+  ELSE
+    RETURN 0; -- Jeśli nie znaleziono pasującego rekordu, zwróć 0
+  END IF;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -369,4 +713,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-18 16:30:35
+-- Dump completed on 2023-06-18 20:41:33

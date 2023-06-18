@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,12 @@ namespace JSOS_3._0
 
         private void Zaloguj(object sender, EventArgs e)
         {
+
+            // TODO odhaczyc
+            login.Text = "aw1";
+            haslo.Text = "1234";
+
+
             bool err=false;
             login_err.Content = string.Empty;
             haslo_err.Content = string.Empty;
@@ -46,27 +53,50 @@ namespace JSOS_3._0
 
             }
 
+            
+
             if (!err)
             {
-                // TODO login
-                //_mainWindow.setID(login)
-                switch (rola)
+
+                string sql = "select uczelnia.login('"+login.Text+ "','"+haslo.Text+"') AS result;";
+                MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                int res=0;
+                while (reader.Read())
                 {
-                    //Kandydat
-                    case 1:
-                        _mainWindow.kandydat();
-                        break;
-
-                    //Student
-                    case 2:
-                        _mainWindow.student();
-                        break;
-
-                    //Pracownik
-                    case 3:
-                        _mainWindow.pracownik();
-                        break;
+                    res = Convert.ToInt16(reader["result"]);
+                    //MessageBox.Show(res.ToString());
                 }
+                reader.Close();
+
+                if (res != 0)
+                {
+                    // TODO faktyczne zalogowanie do bazy danych
+                    _mainWindow.setID(res);
+                    switch (rola)
+                    {
+                        //Kandydat
+                        case 1:
+                            _mainWindow.kandydat();
+                            break;
+
+                        //Student
+                        case 2:
+                            _mainWindow.student();
+                            break;
+
+                        //Pracownik
+                        case 3:
+                            _mainWindow.pracownik();
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Niepoprawny login lub hasło!");
+                }
+
+
+
             }
 
 

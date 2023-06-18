@@ -66,13 +66,13 @@ namespace JSOS_3._0
 
                 try
                 {
-                    string connstring = "server=localhost;uid=Rejestracja_bot;pwd=haslo1234;database=uczelnia";
-                    MySqlConnection conn = new MySqlConnection(connstring);
-                    conn.Open();
+                    //string connstring = "server=localhost;uid=Rejestracja_bot;pwd=haslo1234;database=uczelnia";
+                    //MySqlConnection conn = new MySqlConnection(connstring);
+                    //conn.Open();
 
                     string sql = "select uczelnia.is_login_used('"+login.Text+"') AS result;";
 
-                    MySqlDataReader reader = new MySqlCommand(sql, conn).ExecuteReader();
+                    MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
                     while (reader.Read())
                     {
                         if (Convert.ToInt32(reader["result"]) != 0)
@@ -85,11 +85,11 @@ namespace JSOS_3._0
                         }
                     }
                     reader.Close();
-                    reader = new MySqlCommand(sql, conn).ExecuteReader();
+                    reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
                     
 
 
-                    conn.Close();
+                    _mainWindow.getConn().Close();
 
                     _mainWindow.login(2);
                 }

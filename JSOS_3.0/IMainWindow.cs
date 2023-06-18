@@ -1,9 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using MySql.Data.MySqlClient;
+using System.Windows.Controls;
 
 namespace JSOS_3._0
 {
     public interface IMainWindow
     {
+        MySqlConnection getConn();
         void home();
         void loadView(Frame f);
         void login(int rola);
