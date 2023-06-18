@@ -62,15 +62,15 @@ namespace JSOS_3._0
                 haslo_err.Content.ToString() == string.Empty &
                 login_err.Content.ToString() == string.Empty)
             {
-                //MessageBox.Show("mozna");
 
                 try
                 {
+                    //'CREATE USER ', QUOTE(login), '@localhost IDENTIFIED BY ', QUOTE(pass)
                     //string connstring = "server=localhost;uid=Rejestracja_bot;pwd=haslo1234;database=uczelnia";
                     //MySqlConnection conn = new MySqlConnection(connstring);
                     //conn.Open();
 
-                    string sql = "select uczelnia.is_login_used('"+login.Text+"') AS result;";
+                    string sql = "select uczelnia.is_login_used('" + login.Text+"') AS result;";
 
                     MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
                     while (reader.Read())

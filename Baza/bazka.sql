@@ -286,13 +286,13 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `idUsers` int NOT NULL,
-  `Imie` varchar(45) NOT NULL,
-  `Nazwisko` varchar(45) NOT NULL,
-  `Login` varchar(45) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `Imie` varchar(45) NOT NULL DEFAULT 'brak',
+  `Nazwisko` varchar(45) NOT NULL DEFAULT 'brak',
+  `Login` varchar(45) NOT NULL DEFAULT 'brak',
+  `password` varchar(32) NOT NULL DEFAULT 'brak',
   `tel` int DEFAULT NULL,
   `Email` varchar(80) DEFAULT NULL,
-  `PESEL` float NOT NULL,
+  `PESEL` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`idUsers`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='każdy użytkownik musi mieć swój rekord w tej tabeli';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -306,6 +306,10 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'Piotr','Gmacki','PiGm','1234',123456789,'pg@mail.pl',24579500000),(2,'Kamil','Gracki','aw1','1234',123456789,'jh@mail.pl',24579500000),(3,'Ania','Smacki','aw2','1234',123456789,'ad@mail.pl',24579500000),(4,'Stefan','Racki','aw3','1234',123456789,'gt@mail.pl',24579500000),(5,'Tymon','Rawcki','aw4','1234',123456789,'aw@mail.pl',24579500000),(6,'Patryk','Glacki','aw5','1234',123456789,'kt@mail.pl',24579500000),(7,'Sebastian','Fracki','aw6','1234',123456789,'kw@mail.pl',24579500000),(8,'Karolina','Placki','aw7','1234',123456789,'jh@mail.pl',24579500000),(9,'Aleksandra','Skrzyna','aw8','1234',123456789,'su@mail.pl',24579500000),(10,'Grzegorz','Mrzyna','aw9','1234',123456789,'ap@mail.pl',24579500000),(11,'Michał','Grzyna','aw10','1234',123456789,'lf@mail.pl',24579500000),(12,'Tymon','Rarzyna','aw11','1234',123456789,'pl@mail.pl',24579500000),(13,'Piotr','Kubski','aw12','1234',123456789,'yh@mail.pl',24579500000),(14,'Julia','Pucki','aw13','1234',123456789,'ka@mail.pl',24579500000),(15,'Monika','Grycki','aw14','1234',123456789,'ll@mail.pl',24579500000);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'uczelnia'
+--
 
 --
 -- Dumping routines for database 'uczelnia'
@@ -646,6 +650,32 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `isLoginUsed` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `isLoginUsed`(login_ varchar(30)) RETURNS varchar(30) CHARSET utf8mb4
+BEGIN
+-- SELECT Login INTO result FROM users WHERE Login = login_ LIMIT 1;
+
+IF EXISTS (SELECT * FROM users WHERE Login = login_) THEN
+	-- login zajety
+    RETURN true;
+ELSE
+    RETURN false;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP FUNCTION IF EXISTS `login` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -675,6 +705,41 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `signin` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `signin`(login VARCHAR(255), pass VARCHAR(255)) RETURNS int
+BEGIN
+DECLARE result INT;
+  DECLARE newUserID INT;
+  DECLARE isTaken BOOL;
+  SET isTaken = False;
+  SET newUserID = 0;
+  
+  -- SELECT idUsers INTO newUserID FROM users WHERE Login = 'login' LIMIT 1;
+  -- Przeszukaj tabelę users w poszukiwaniu zajetego juz loginu
+  
+  IF EXISTS (SELECT idUsers FROM users WHERE Login = QUOTE(login)) THEN
+-- login zajety
+    RETURN 0;
+ELSE
+	-- call uczelnia.add_kandydat(login, pass);
+        RETURN 1;
+END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `add_kandydat` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -685,11 +750,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_kandydat`(login varchar(30),pass varchar(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_kandydat`(IN login varchar(30), IN pass varchar(30))
     MODIFIES SQL DATA
 BEGIN
 
-CREATE USER login@'localhost' IDENTIFIED BY 'pass';
+    SET @sql = CONCAT('CREATE USER ', QUOTE(login), '@localhost IDENTIFIED BY ', QUOTE(pass));
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 
 GRANT SELECT ON uczelnia.kierunek TO 'login'@'localhost';
 GRANT SELECT ON uczelnia.przedmiot TO 'login'@'localhost';
@@ -713,4 +781,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-18 20:41:33
+-- Dump completed on 2023-06-18 22:50:31
