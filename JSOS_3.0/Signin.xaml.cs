@@ -28,6 +28,7 @@ namespace JSOS_3._0
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            _mainWindow.RejestrBot();
         }
 
         private void Powrot(object sender, EventArgs e)
@@ -66,11 +67,8 @@ namespace JSOS_3._0
                 try
                 {
                     //'CREATE USER ', QUOTE(login), '@localhost IDENTIFIED BY ', QUOTE(pass)
-                    //string connstring = "server=localhost;uid=Rejestracja_bot;pwd=haslo1234;database=uczelnia";
-                    //MySqlConnection conn = new MySqlConnection(connstring);
-                    //conn.Open();
 
-                    string sql = "select uczelnia.is_login_used('" + login.Text+"') AS result;";
+                    string sql = "select uczelnia.is_login_used('" + login.Text + "') AS result;";
 
                     MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
                     while (reader.Read())
@@ -81,15 +79,16 @@ namespace JSOS_3._0
                         }
                         else
                         {
-                            sql = "CREATE USER '"+login.Text+ "'@'localhost' IDENTIFIED BY '"+haslo.Text+"'";
+                            sql = "CREATE USER '" + login.Text + "'@'localhost' IDENTIFIED BY '" + haslo.Text + "'";
+
                         }
                     }
                     reader.Close();
-                    reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                    
+                    _mainWindow.CloseConn();
 
 
-                    _mainWindow.getConn().Close();
+
+                    // TODO signin
 
                     _mainWindow.login(2);
                 }

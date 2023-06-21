@@ -21,21 +21,21 @@ namespace JSOS_3._0
     /// </summary>
     public partial class Login : Page
     {
-        private readonly IMainWindow _mainWindow;
+        private readonly IMainWindow mainWindow;
         int rola;
-        public Login(int rola_, IMainWindow mainWindow)
+        public Login(int rola_, IMainWindow _mainWindow)
         {
             InitializeComponent();
             rola = rola_;
-                _mainWindow = mainWindow;
+            mainWindow = _mainWindow;
         }
 
         private void Zaloguj(object sender, EventArgs e)
         {
 
             // TODO odhaczyc
-            login.Text = "aw1";
-            haslo.Text = "1234";
+            //login.Text = "aw1";
+            //haslo.Text = "1234";
 
 
             bool err=false;
@@ -53,14 +53,31 @@ namespace JSOS_3._0
 
             }
 
-            
-
-            if (!err)
+            if (err)
             {
+                //MessageBox.Show("Niepoprawny login lub hasło!");
+                return;
+            }
 
-                string sql = "select uczelnia.login('"+login.Text+ "','"+haslo.Text+"') AS result;";
-                MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                int res=0;
+
+            try
+            {
+                string connstring = "server=localhost;uid=" + login.Text + ";pwd=" + haslo.Text + ";database=uczelnia";
+                mainWindow.setConn(new MySqlConnection(connstring));
+                mainWindow.getConn().Open();
+                if (!mainWindow.getConn().Ping())
+                {
+                MessageBox.Show("blad polaczenia");
+                }   
+            }
+            catch (MySqlException ex)
+            {
+            MessageBox.Show("catch: " + ex.Message);
+                return;
+            }
+            string sql = "select uczelnia.login('" + login.Text + "','" + haslo.Text + "') AS result;";
+                MySqlDataReader reader = new MySqlCommand(sql, mainWindow.getConn()).ExecuteReader();
+                int res = 0;
                 while (reader.Read())
                 {
                     res = Convert.ToInt16(reader["result"]);
@@ -71,29 +88,25 @@ namespace JSOS_3._0
                 if (res != 0)
                 {
                     // TODO faktyczne zalogowanie do bazy danych
-                    _mainWindow.setID(res);
+                    mainWindow.setID(res);
                     switch (rola)
                     {
                         //Kandydat
                         case 1:
-                            _mainWindow.kandydat();
+                            mainWindow.kandydat();
                             break;
 
                         //Student
                         case 2:
-                            _mainWindow.student();
+                            mainWindow.student();
                             break;
 
                         //Pracownik
                         case 3:
-                            _mainWindow.pracownik();
+                            mainWindow.pracownik();
                             break;
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Niepoprawny login lub hasło!");
-                }
+
 
 
 
@@ -109,11 +122,11 @@ namespace JSOS_3._0
         {
             if (rola == 1)
             {
-                _mainWindow.kandydatWybor();
+                mainWindow.kandydatWybor();
             }
             else
             {
-                _mainWindow.home();
+                mainWindow.home();
             }
         }
     }
