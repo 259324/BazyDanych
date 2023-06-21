@@ -34,20 +34,20 @@ namespace JSOS_3._0
             _mainWindow = mainWindow;
 
 
-            for (int i = 0; i < funkcjeBD.Length; i++)
-            {
-                string sql = "select uczelnia." + funkcjeBD[i] + "(" + _mainWindow.getID() + ") AS result;";
-                MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+            //for (int i = 0; i < funkcjeBD.Length; i++)
+            //{
+            //    string sql = "select uczelnia." + funkcjeBD[i] + "(" + _mainWindow.getID() + ") AS result;";
+            //    MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
 
-                String res = "";
-                while (reader.Read())
-                {
-                        res = Convert.ToString(reader["result"]);
-                }
-                reader.Close();
+            //    String res = "";
+            //    while (reader.Read())
+            //    {
+            //            res = Convert.ToString(reader["result"]);
+            //    }
+            //    reader.Close();
 
-                pobraneDane[i] = res;
-            }
+            //    pobraneDane[i] = res;
+            //}
 
             if(pobraneDane[pobraneDane.Length - 1] == "True")
             {

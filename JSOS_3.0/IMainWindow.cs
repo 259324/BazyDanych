@@ -5,7 +5,11 @@ namespace JSOS_3._0
 {
     public interface IMainWindow
     {
+        void RejestrBot();
+        void CloseConn();
         MySqlConnection getConn();
+        void setConn(MySqlConnection conn);
+
         void home();
         void loadView(Frame f);
         void login(int rola);

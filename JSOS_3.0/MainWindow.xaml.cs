@@ -28,14 +28,27 @@ namespace JSOS_3._0
         public MainWindow()
         {
             InitializeComponent();
-            home();
 
             Closing += MainWindow_Closing;
+            home();
 
 
+        }
+
+        //tworzy użytkowników z tablicy users na serwerze,
+        //przydatne przy pierwszym uruchamianiu bazy danych
+        private void updateUsers()
+        {
+            RejestrBot();
+
+            CloseConn();
+
+        }
+        public void RejestrBot()
+        {
             try
             {
-                string connstring = "server=localhost;uid=Rejestracja_bot;pwd=haslo1234;database=uczelnia";
+                string connstring = "server=localhost;uid=Rejestracja_bot;pwd=1234;database=uczelnia";
                 conn = new MySqlConnection(connstring);
                 conn.Open();
                 if (!conn.Ping())
@@ -46,9 +59,13 @@ namespace JSOS_3._0
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show("catch: "+ex.Message);
+                MessageBox.Show("catch: " + ex.Message);
             }
+        }
 
+        public void CloseConn()
+        {
+            conn.Close();
         }
 
         public MySqlConnection getConn()
@@ -56,9 +73,25 @@ namespace JSOS_3._0
             return conn;
         }
 
+        public void setConn(MySqlConnection conn_)
+        {
+            conn = conn_;
+        }
+
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            conn.Close();
+            if (conn != null)
+            {
+                try
+                {
+                    conn.Close();
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("catch: " + ex.Message);
+                }
+            }
+
         }
 
         public void setID(int ID_)

@@ -21,7 +21,7 @@ namespace JSOS_3._0
     public partial class StudentOceny: Page
     {
         private readonly IMainWindow _mainWindow;
-        public Ocena[] listaOcen = { new Ocena(3.5,DateTime.Now,"druty","swintuch","praca na lekcji") };
+        public Ocena[] listaOcen = { new Ocena(3.5,DateTime.Now,"druty","gmacki","praca na lekcji") };
 
 
         // Załaduj plik XAML ze stylami
