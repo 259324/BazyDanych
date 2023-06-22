@@ -246,6 +246,4 @@ paket-files/
 *.cache
 *.cache
 *.lref
-*.cs
-*.cs
-*.cs
+

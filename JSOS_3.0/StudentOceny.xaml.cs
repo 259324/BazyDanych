@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,15 @@ namespace JSOS_3._0
     public partial class StudentOceny: Page
     {
         private readonly IMainWindow _mainWindow;
-        public Ocena[] listaOcen = { new Ocena(3.5,DateTime.Now,"druty","gmacki","praca na lekcji") };
+        //public Ocena[] listaOcen = { new Ocena(3.5,DateTime.Now,"druty","gmacki","praca na lekcji") };
+        
+        List<Ocena> listaOcen = new List<Ocena>();
+        MySqlDataReader reader;
+        string sql = "";
+        string result = "";
+        string studid = string.Empty;
+
+
 
 
         // Załaduj plik XAML ze stylami
@@ -34,10 +43,90 @@ namespace JSOS_3._0
             InitializeComponent();
             _mainWindow = mainWindow;
 
+            //pobranie studentid
+
+            sql = "select uczelnia.getStudentid(" + _mainWindow.getID() + ") AS result;";
+            reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+            while (reader.Read())
+            {
+                studid = Convert.ToString(reader["result"]);
+            }
+            reader.Close();
+
+            //pobranie ocen
+            int count = 0;
+            while (true)
+            {
+                string imieNazw ="";
+
+                Ocena ocena = new Ocena();
+                sql = "select uczelnia.getOceny(" + studid + ","+count+") AS result;";
+                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                while (reader.Read())
+                {
+                    result = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+                if(result.Length > 0)
+                {
+                    ocena.stopien = result;
+                }
+                else
+                {
+                    break;
+                }
+
+                sql = "select uczelnia.getOcenyData(" + studid + "," + count + ") AS result;";
+                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                while (reader.Read())
+                {
+                    result = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+                ocena.data = result;
+
+                sql = "select uczelnia.getOcenyOpis(" + studid + "," + count + ") AS result;";
+                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                while (reader.Read())
+                {
+                    result = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+                ocena.opis = result;
+
+                sql = "select uczelnia.getOcenyPrzed(" + studid + "," + count + ") AS result;";
+                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                while (reader.Read())
+                {
+                    result = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+                ocena.przedmiot = result;
+
+                sql = "select uczelnia.getOcenyWystawil(" + studid + "," + count + ") AS result;";
+                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                while (reader.Read())
+                {
+                    result = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+
+
+                ocena.wystawil = _mainWindow.getPracDane(Convert.ToInt16(result));
+                ;
+
+
+
+                listaOcen.Add(ocena);  
+                count++;
+            }
+
+
             resourceDict.Source = new Uri("Style.xaml", UriKind.RelativeOrAbsolute);
 
             Grid legenda = new Grid();
 
+            legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
@@ -70,15 +159,21 @@ namespace JSOS_3._0
             Grid.SetColumn(wystawilL, 3);
             legenda.Children.Add(wystawilL);
 
+            Label opisL = new Label();
+            opisL.Style = resourceDict["OcenaL"] as Style;
+            opisL.Content = "Opis";
+            Grid.SetColumn(opisL, 4);
+            legenda.Children.Add(opisL);
 
             panelOcen.Children.Add(legenda);
 
 
-            for (int i = 0; i < listaOcen.Length; i++)
+            for (int i = 0; i < listaOcen.Count; i++)
             {
 
                 Grid komorka = new Grid();
 
+                komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
@@ -109,6 +204,12 @@ namespace JSOS_3._0
                 Grid.SetColumn(wystawil, 3);
                 komorka.Children.Add(wystawil);
 
+                Label opis = new Label();
+                opis.Style = resourceDict["Ocena"] as Style;
+                opis.Content = listaOcen[i].opis;
+                Grid.SetColumn(opis, 4);
+                komorka.Children.Add(opis);
+
 
                 panelOcen.Children.Add(komorka);
 
@@ -123,19 +224,27 @@ namespace JSOS_3._0
 
     public class Ocena
     {
-        public double stopien;
-        public DateTime data;
+        public string stopien;
+        public string data;
         public string przedmiot;
         public string wystawil;
         public string opis;
 
-        public Ocena(double stopien_,DateTime data_,string przedmiot_,string wystawil_, string opis_)
+        public Ocena(string stopien_, string data_,string przedmiot_,string wystawil_, string opis_)
         {
             stopien = stopien_;
             data = data_;
             przedmiot = przedmiot_; 
             wystawil = wystawil_;
             opis = opis_;
+        }
+        public Ocena()
+        {
+            stopien = String.Empty;
+            data = String.Empty;
+            przedmiot = String.Empty;
+            wystawil = String.Empty;
+            opis = String.Empty;
         }
     }
 }

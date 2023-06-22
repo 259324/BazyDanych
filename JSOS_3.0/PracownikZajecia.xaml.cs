@@ -1,7 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,13 +19,13 @@ using System.Windows.Shapes;
 namespace JSOS_3._0
 {
     /// <summary>
-    /// Interaction logic for Kandydat.xaml
+    /// Interaction logic for PracownikZajecia.xaml
     /// </summary>
-    public partial class StudentZajecia: Page
+    public partial class PracownikZajecia : Page
     {
         private readonly IMainWindow _mainWindow;
-
         List<Zajecie> listaZajec = new List<Zajecie>();
+        List<string> listaPrzed= new List<string>();
         MySqlDataReader reader;
         string sql = "";
         string result = "";
@@ -37,39 +39,17 @@ namespace JSOS_3._0
 
 
 
-        public StudentZajecia(IMainWindow mainWindow)
+        public PracownikZajecia(IMainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
 
 
-            //pobranie studentid
-            sql = "select uczelnia.getStudentid(" + _mainWindow.getID() + ") AS result;";
-            reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-            while (reader.Read())
-            {
-                studid = Convert.ToString(reader["result"]);
-            }
-            reader.Close();
-
-            //pobranie kierunekid studenta
-            sql = "select uczelnia.getKier(" + _mainWindow.getID() + ") AS result;";
-            reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-            while (reader.Read())
-            {
-                kierid = Convert.ToString(reader["result"]);
-            }
-            reader.Close();
-
-
-            //pobranie zajec
             int count = 0;
+            // pobranie przedmiotow, ktorych uczy
             while (true)
             {
-
-                Zajecie zajecie = new Zajecie();
-
-                sql = "select uczelnia.getLekcjaData(" + kierid + "," + count + ") AS result;";
+                sql = "select uczelnia.getPrzedPracownika(" + _mainWindow.getID() + "," + count + ") AS result;";
                 reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
                 while (reader.Read())
                 {
@@ -78,7 +58,7 @@ namespace JSOS_3._0
                 reader.Close();
                 if (result.Length > 0)
                 {
-                    zajecie.data = result;
+                    listaPrzed.Add(result);
                 }
                 else
                 {
@@ -87,67 +67,75 @@ namespace JSOS_3._0
 
                 }
                 reader.Close();
-
-                sql = "select uczelnia.getLekcjaPrzedID(" + kierid + "," + count + ") AS result;";
-                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                while (reader.Read())
-                {
-                    result = Convert.ToString(reader["result"]);
-                }
-                reader.Close();
-
-                sql = "select uczelnia.getPrzedPracUserID(" + result + ") AS result;";
-                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                while (reader.Read())
-                {
-                    pracUserid = Convert.ToString(reader["result"]);
-                }
-                reader.Close();
-
-
-
-
-                zajecie.prowadzacy= _mainWindow.getPracDane(Convert.ToInt16(pracUserid));
-
-
-                sql = "select uczelnia.getPrzedNazwa(" + result + ") AS result;";
-                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                while (reader.Read())
-                {
-                    result = Convert.ToString(reader["result"]);
-                }
-                reader.Close();
-
-                zajecie.przedmiot = result;
-
-
-                sql = "select uczelnia.getLekcjaCzas(" + kierid + "," + count + ") AS result;";
-                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                while (reader.Read())
-                {
-                    result = Convert.ToString(reader["result"]);
-                }
-                reader.Close();
-
-                zajecie.czasTrwa = result;
-
-
-
-
-
-
-                listaZajec.Add(zajecie);
-
                 count++;
+            }
+
+            ////pobranie zajec
+            for(int i = 0; i < listaPrzed.Count;i++)
+            {
+                count = 0;
+
+                while (true)
+                {
+
+
+                    Zajecie zajecie = new Zajecie();
+
+
+                    sql = "select uczelnia.getLekcjaCzasByPrzed(" + listaPrzed[i] + "," + count + ") AS result;";
+                    reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result = Convert.ToString(reader["result"]);
+                    }
+                    reader.Close();
+                    if (result.Length > 0)
+                    {
+                        zajecie.czasTrwa = result;
+                    }
+                    else
+                    {
+                        reader.Close();
+                        break;
+
+                    }
+                    reader.Close();
+
+
+                    sql = "select uczelnia.getPrzedNazwa(" + listaPrzed[count] + ") AS result;";
+                    reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result = Convert.ToString(reader["result"]);
+                    }
+                    reader.Close();
+
+                    zajecie.przedmiot = result;
+
+
+                    sql = "select uczelnia.getLekcjaDataByPrzed(" + listaPrzed[count] + "," + count + ") AS result;";
+                    reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result = Convert.ToString(reader["result"]);
+                    }
+                    reader.Close();
+
+                    zajecie.data = result;
+
+
+                    listaZajec.Add(zajecie);
+                    count++;
+                }
 
             }
+
 
 
             resourceDict.Source = new Uri("Style.xaml", UriKind.RelativeOrAbsolute);
 
             Grid legenda = new Grid();
 
-            legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
             legenda.ColumnDefinitions.Add(new ColumnDefinition());
@@ -171,12 +159,6 @@ namespace JSOS_3._0
             Grid.SetColumn(czasTrwaL, 2);
             legenda.Children.Add(czasTrwaL);
 
-            Label prowadzacyL = new Label();
-            prowadzacyL.Style = resourceDict["OcenaL"] as Style;
-            prowadzacyL.Content = "Prowadzacy";
-            Grid.SetColumn(prowadzacyL, 3);
-            legenda.Children.Add(prowadzacyL);
-
 
             panelZajec.Children.Add(legenda);
 
@@ -186,7 +168,6 @@ namespace JSOS_3._0
 
                 Grid komorka = new Grid();
 
-                komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
                 komorka.ColumnDefinitions.Add(new ColumnDefinition());
@@ -206,15 +187,9 @@ namespace JSOS_3._0
 
                 Label czasTrwa = new Label();
                 czasTrwa.Style = resourceDict["Ocena"] as Style;
-                czasTrwa.Content = listaZajec[i].czasTrwa+"min";
+                czasTrwa.Content = listaZajec[i].czasTrwa + "min";
                 Grid.SetColumn(czasTrwa, 2);
                 komorka.Children.Add(czasTrwa);
-
-                Label prowadzacy = new Label();
-                prowadzacy.Style = resourceDict["Ocena"] as Style;
-                prowadzacy.Content = listaZajec[i].prowadzacy;
-                Grid.SetColumn(prowadzacy, 3);
-                komorka.Children.Add(prowadzacy);
 
 
                 panelZajec.Children.Add(komorka);
@@ -224,29 +199,19 @@ namespace JSOS_3._0
         }
         public void Powrot(object sender, EventArgs e)
         {
-            _mainWindow.student();
+            _mainWindow.pracownik();
         }
         public class Zajecie
         {
             public string data;
             public string przedmiot;
             public string czasTrwa;
-            public string prowadzacy;
-
-            public Zajecie(string data_, string czasTrwa_, string przedmiot_, string prowadzacy_)
-            {
-                czasTrwa = czasTrwa_;
-                data = data_;
-                przedmiot = przedmiot_;
-                prowadzacy=prowadzacy_;
-            }
 
             public Zajecie()
             {
                 czasTrwa = String.Empty;
                 data = String.Empty;
                 przedmiot = String.Empty;
-                prowadzacy = String.Empty;
             }
         }
     }

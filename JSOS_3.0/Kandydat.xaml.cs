@@ -24,42 +24,22 @@ namespace JSOS_3._0
     {
         private readonly IMainWindow _mainWindow;
         public string[] listaDanych = {"Imię", "Nazwisko" , "Login" , "Hasło" , "Nr. telefonu" , "E-mail" , "PESEL" , "Matura %" , "Kierunek"};
-        public string[] funkcjeBD = {"getImie","getNazwisko" ,"getLogin" ,"getPass" ,"getTel" ,"getMail" ,"getPESEL" ,"getMatura" ,"getKier","getStatus"};
-        public string[] pobraneDane = {"getImie","getNazwisko" ,"getLogin" ,"getPass" ,"getTel" ,"getMail" ,"getPESEL" ,"getMatura" ,"getKier","getStatus"};
+        public string[] funkcjeGet = {"getImie","getNazwisko" ,"getLogin" ,"getPass" ,"getTel" ,"getMail" ,"getPESEL" ,"getMatura" ,"getKier","getStatus"};
+        public string[] funkcjeSet = { "setimie", "setnazwisko" ,"setlogin" ,"setpassword" ,"settel" ,"setemail" ,"setpesel" ,"setmatura" ,"setkierunek"};
+        List<TextBox> listaTextBox = new List<TextBox>();
 
+        MySqlDataReader reader;
+        string sql = "";
+        string result = "";
 
         public Kandydat(IMainWindow mainWindow)
         {
             InitializeComponent();
             _mainWindow = mainWindow;
 
-
-            //for (int i = 0; i < funkcjeBD.Length; i++)
-            //{
-            //    string sql = "select uczelnia." + funkcjeBD[i] + "(" + _mainWindow.getID() + ") AS result;";
-            //    MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-
-            //    String res = "";
-            //    while (reader.Read())
-            //    {
-            //            res = Convert.ToString(reader["result"]);
-            //    }
-            //    reader.Close();
-
-            //    pobraneDane[i] = res;
-            //}
-
-            if(pobraneDane[pobraneDane.Length - 1] == "True")
+            //zaladowanie komorek (bez danych)
+            for (int i = 0; i < listaDanych.Length; i++)
             {
-                status.Content = "Przyjęto";
-            }
-            else
-            {
-                status.Content = "Odrzucono";
-            }
-
-
-            for (int i = 0; i < listaDanych.Length; i++) {
 
                 Grid komorka = new Grid();
 
@@ -69,14 +49,12 @@ namespace JSOS_3._0
                 komorka.ColumnDefinitions[0].Width = new GridLength(150);
 
 
-                // TODO wyswietlenie nie id
-
                 TextBox poleDanych = new TextBox();
-                poleDanych.Text = pobraneDane[i];
                 poleDanych.Width = 500;
                 poleDanych.HorizontalAlignment = HorizontalAlignment.Left;
                 poleDanych.Margin = new Thickness(10);
                 poleDanych.FontSize = 15;
+                listaTextBox.Add(poleDanych);
 
 
                 Label jakieDane = new Label();
@@ -85,23 +63,79 @@ namespace JSOS_3._0
                 jakieDane.Margin = new Thickness(10);
                 jakieDane.HorizontalAlignment = HorizontalAlignment.Left;
 
-
-
                 Grid.SetColumn(jakieDane, 0);
                 komorka.Children.Add(jakieDane);
 
                 Grid.SetColumn(poleDanych, 1);
                 komorka.Children.Add(poleDanych);
 
-
                 panelDanych.Children.Add(komorka);
 
             }
 
+
+
+            // zaladowanie danych w liscie
+            for (int i = 0; i < listaTextBox.Count; i++)
+            {
+                sql = "select uczelnia." + funkcjeGet[i] + "(" + _mainWindow.getID() + ") AS result;";
+                reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+
+                result = "";
+                while (reader.Read())
+                {
+                    result = Convert.ToString(reader["result"]);
+                }
+                reader.Close();
+
+                listaTextBox[i].Text = result;
+
+            }
+
+
+
+            //zaladowanie statusu
+            sql = "select uczelnia." + funkcjeGet[listaTextBox.Count] + "(" + _mainWindow.getID() + ") AS result;";
+            reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
+            result = "";
+            while (reader.Read())
+            {
+                result = Convert.ToString(reader["result"]);
+            }
+            reader.Close();
+
+
+            if (result == "True")
+            {
+                status.Content = "Przyjęto";
+            }
+            else
+            {
+                status.Content = "Odrzucono";
+            }
         }
+
         public void Powrot(object sender, EventArgs e)
         {
             _mainWindow.kandydatWybor();
+        }
+
+        public void update(object sender, EventArgs e)
+        {
+            string send;
+            for (int i = 0; i < funkcjeSet.Length; i++)
+            {
+                if (listaTextBox[i].Text == "")
+                {
+                    send = "0";
+                }
+                else
+                {
+                    send = listaTextBox[i].Text;
+                }
+                sql = "call uczelnia." + funkcjeSet[i] + "(" + _mainWindow.getID() + ",'" + send + "');";
+                new MySqlCommand(sql, _mainWindow.getConn()).ExecuteScalar();
+            }
         }
     }
 }

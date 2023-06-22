@@ -23,6 +23,7 @@ namespace JSOS_3._0
     public partial class Signin : Page
     {
         private readonly IMainWindow _mainWindow;
+        private bool err = false;
 
         public Signin(IMainWindow mainWindow)
         {
@@ -34,69 +35,101 @@ namespace JSOS_3._0
         private void Powrot(object sender, EventArgs e)
         {
             _mainWindow.kandydatWybor();
+            _mainWindow.CloseConn();
         }
 
         public void Zarejestruj(object sender, EventArgs e)
         {
+            err = false;
             login_err.Content= string.Empty;
             haslo_err.Content= string.Empty;
             phaslo_err.Content= string.Empty;
 
+
             if (login.Text.Length < 1)
             {
                 login_err.Content = "Niepoprawny login";
+                err = true;
+
             }
-            if(haslo.Text.Length<1)
+            if (haslo.Text.Length<1)
             {
                 haslo_err.Content = "Niepoprawne hasło";
+                err = true;
+
             }
-            if(phaslo.Text.Length < 1)
+            if (phaslo.Text.Length < 1)
             {
                 phaslo_err.Content = "Niepoprawne hasło";
+                err = true;
+
             }
             if(phaslo.Text!=haslo.Text)
             {
                 phaslo_err.Content = "Hasła różnią się";
+                err = true;
+
+
             }
 
-            if (phaslo_err.Content.ToString() == string.Empty & 
-                haslo_err.Content.ToString() == string.Empty &
-                login_err.Content.ToString() == string.Empty)
+
+            if (err){ return; }
+
+
+            try
             {
 
-                try
-                {
-                    //'CREATE USER ', QUOTE(login), '@localhost IDENTIFIED BY ', QUOTE(pass)
-
-                    string sql = "select uczelnia.is_login_used('" + login.Text + "') AS result;";
+                    string sql = "select uczelnia.isLoginUsed('" + login.Text + "') AS result;";
 
                     MySqlDataReader reader = new MySqlCommand(sql, _mainWindow.getConn()).ExecuteReader();
-                    while (reader.Read())
+                while (reader.Read() && !reader.IsClosed)
+                {
+
+                    if (reader["result"].ToString() == "True")
                     {
-                        if (Convert.ToInt32(reader["result"]) != 0)
-                        {
-                            login_err.Content = "Login zajęty";
-                        }
-                        else
-                        {
-                            sql = "CREATE USER '" + login.Text + "'@'localhost' IDENTIFIED BY '" + haslo.Text + "'";
-
-                        }
+                        MessageBox.Show("Login zajęty");
+                        reader.Close(); 
+                        return;
                     }
-                    reader.Close();
-                    _mainWindow.CloseConn();
+                    else
+                    {
+                        reader.Close();
+                        try
+                        {
+                            sql = "CREATE USER '" + login.Text + "'@'localhost' IDENTIFIED WITH mysql_native_password BY '" + haslo.Text +"';";
+                            new MySqlCommand(sql, _mainWindow.getConn()).ExecuteScalar();
 
+                            sql = "GRANT RolaKandydat TO '" + login.Text + "'@'localhost';";
+                            new MySqlCommand(sql, _mainWindow.getConn()).ExecuteScalar();
 
+                            sql = "flush privileges;";
+                            new MySqlCommand(sql, _mainWindow.getConn()).ExecuteScalar();
 
-                    // TODO signin
+                            sql = "call uczelnia.add_kandydat('" + login.Text + "','" + haslo.Text + "');";
+                            new MySqlCommand(sql, _mainWindow.getConn()).ExecuteScalar();
 
-                    _mainWindow.login(2);
+                        }
+                        catch (MySqlException ex) { 
+                            MessageBox.Show(ex.Message);
+                        }
+
+                        _mainWindow.CloseConn();
+                        
+                        _mainWindow.login(1);
+
+                        return;
+
+                    }
                 }
-                catch (MySqlException ex)
+                
+
+                // TODO signin
+
+            }
+            catch (MySqlException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-            }
         }
 
     }

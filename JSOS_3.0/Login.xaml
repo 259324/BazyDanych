@@ -48,7 +48,7 @@
             <Label Name="login_err" Grid.Row="0" Foreground="Red"/>
             <Label Name="haslo_err" Grid.Row="1" Foreground="Red"/>
 
-            <TextBox Name="login" FontSize="10"  Padding="5,5,5,5" HorizontalAlignment="Stretch" Grid.Row="0" Margin="30,0,30,0"
+            <TextBox Name="login" FontSize="10" Padding="5,5,5,5" HorizontalAlignment="Stretch" Grid.Row="0" Margin="30,0,30,0"
                  VerticalAlignment="Center">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">

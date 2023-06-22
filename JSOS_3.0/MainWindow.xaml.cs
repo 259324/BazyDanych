@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,15 +36,37 @@ namespace JSOS_3._0
 
         }
 
-        //tworzy użytkowników z tablicy users na serwerze,
-        //przydatne przy pierwszym uruchamianiu bazy danych
-        private void updateUsers()
+        public string getPracDane(int userID)
         {
-            RejestrBot();
+            string tytImieNazw = String.Empty;
+            string sql = "select uczelnia.getTyt(" + userID + ") AS result;";
+            MySqlDataReader reader = new MySqlCommand(sql, conn).ExecuteReader();
+            while (reader.Read())
+            {
+                tytImieNazw = Convert.ToString(reader["result"]);
+            }
+            reader.Close();
 
-            CloseConn();
+            sql = "select uczelnia.getImie(" + userID + ") AS result;";
+            reader = new MySqlCommand(sql, conn).ExecuteReader();
+            while (reader.Read())
+            {
+                tytImieNazw += " " + Convert.ToString(reader["result"]);
+            }
+            reader.Close();
 
+            sql = "select uczelnia.getNazwisko(" + userID + ") AS result;";
+            reader = new MySqlCommand(sql, conn).ExecuteReader();
+            while (reader.Read())
+            {
+                tytImieNazw += " " + Convert.ToString(reader["result"]);
+            }
+            reader.Close();
+
+            return tytImieNazw;
         }
+
+
         public void RejestrBot()
         {
             try

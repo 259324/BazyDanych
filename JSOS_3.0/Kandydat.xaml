@@ -32,7 +32,10 @@
 
         <Button x:Name="powrot" Style="{DynamicResource ButtonStyle}" Click="Powrot"/>
 
-        
+        <Button x:Name="Update" Style="{DynamicResource ButtonStyle}" Click="update" Grid.Column="0"
+                Grid.Row="3" Content="Update" />
+
+
         <Label Grid.Column="0" Grid.Row="1" Content="Twoje dane:" VerticalAlignment="Top" HorizontalAlignment="Right"
                FontSize="30"/>
 

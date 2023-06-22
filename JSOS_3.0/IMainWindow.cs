@@ -10,6 +10,7 @@ namespace JSOS_3._0
         MySqlConnection getConn();
         void setConn(MySqlConnection conn);
 
+        string getPracDane(int userID);
         void home();
         void loadView(Frame f);
         void login(int rola);

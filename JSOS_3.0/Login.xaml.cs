@@ -28,15 +28,12 @@ namespace JSOS_3._0
             InitializeComponent();
             rola = rola_;
             mainWindow = _mainWindow;
+            login.Text = "aw5";
+            haslo.Text = "1234";
         }
 
         private void Zaloguj(object sender, EventArgs e)
         {
-
-            // TODO odhaczyc
-            //login.Text = "aw1";
-            //haslo.Text = "1234";
-
 
             bool err=false;
             login_err.Content = string.Empty;
@@ -53,62 +50,114 @@ namespace JSOS_3._0
 
             }
 
-            if (err)
-            {
-                //MessageBox.Show("Niepoprawny login lub hasło!");
-                return;
-            }
+            if (err){ return; }
 
 
+            //logowanie do serwera
             try
             {
-                string connstring = "server=localhost;uid=" + login.Text + ";pwd=" + haslo.Text + ";database=uczelnia";
+
+                //string connstring = "server=localhost;uid=" + login.Text+";pwd="+haslo.Text+";database=uczelnia";
+                string connstring = "server=localhost;uid=tmpUser;pwd=1234;database=uczelnia";
                 mainWindow.setConn(new MySqlConnection(connstring));
                 mainWindow.getConn().Open();
                 if (!mainWindow.getConn().Ping())
                 {
-                MessageBox.Show("blad polaczenia");
-                }   
+                    MessageBox.Show("blad polaczenia");
+                }
+
             }
             catch (MySqlException ex)
             {
-            MessageBox.Show("catch: " + ex.Message);
+                MessageBox.Show("1 catch: " + ex.Message);
                 return;
             }
+
+
+            // walidacja halsa i loginu i wyboru roli
             string sql = "select uczelnia.login('" + login.Text + "','" + haslo.Text + "') AS result;";
-                MySqlDataReader reader = new MySqlCommand(sql, mainWindow.getConn()).ExecuteReader();
-                int res = 0;
-                while (reader.Read())
+            MySqlDataReader reader = new MySqlCommand(sql, mainWindow.getConn()).ExecuteReader();
+            int res = 0;
+            while (reader.Read())
+            {
+                res = Convert.ToInt16(reader["result"]);
+            }
+            reader.Close();
+            if (res != 0)
+            {
+                mainWindow.setID(res);
+                string resul="";
+                switch (rola)
                 {
-                    res = Convert.ToInt16(reader["result"]);
-                    //MessageBox.Show(res.ToString());
-                }
-                reader.Close();
+                    //Kandydat
+                    case 1:
+                        sql = "select uczelnia.isKandydat("+ mainWindow.getID() + ") AS result;";
+                        reader = new MySqlCommand(sql, mainWindow.getConn()).ExecuteReader();
+                        while (reader.Read())
+                        {
+                            resul = reader["result"].ToString();
+                        }
+                        reader.Close();
 
-                if (res != 0)
-                {
-                    // TODO faktyczne zalogowanie do bazy danych
-                    mainWindow.setID(res);
-                    switch (rola)
-                    {
-                        //Kandydat
-                        case 1:
+                        if (resul == "True")
+                        {
                             mainWindow.kandydat();
-                            break;
 
-                        //Student
-                        case 2:
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nie jeteś Kandydatem!");
+                        }
+                        break;
+
+                    //Student
+                    case 2:
+                        sql = "select uczelnia.isStudent(" + mainWindow.getID() + ") AS result;";
+                        reader = new MySqlCommand(sql, mainWindow.getConn()).ExecuteReader();
+                        while (reader.Read())
+                        {
+                            resul = reader["result"].ToString();
+                        }
+                        reader.Close();
+
+                        if (resul == "True")
+                        {
                             mainWindow.student();
-                            break;
 
-                        //Pracownik
-                        case 3:
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nie jeteś Studentem!");
+                            return;
+                        }
+                        break;
+
+
+                    //Pracownik
+                    case 3:
+                        sql = "select uczelnia.isPrac(" + mainWindow.getID() + ") AS result;";
+                        reader = new MySqlCommand(sql, mainWindow.getConn()).ExecuteReader();
+                        while (reader.Read())
+                        {
+                            resul = reader["result"].ToString();
+                        }
+                        reader.Close();
+
+                        if (resul == "True")
+                        {
                             mainWindow.pracownik();
-                            break;
-                    }
 
-
-
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nie jeteś Pracownikiem!");
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("bledny login lub haslo");
 
             }
 
